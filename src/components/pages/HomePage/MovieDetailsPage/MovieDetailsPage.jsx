@@ -12,6 +12,7 @@ export default class MovieDetailsPage extends Component {
   state = {
     movie: null,
     error: null,
+    success: true,
   };
 
   static propTypes = {};
@@ -19,7 +20,12 @@ export default class MovieDetailsPage extends Component {
   componentDidMount() {
     moviesApi
       .getMovieDetails(this.props.match.params.movieId)
-      .then(fetchedMovie => this.setState({ movie: fetchedMovie }))
+      .then(fetchedMovie =>
+        this.setState({
+          movie: fetchedMovie,
+          success: fetchedMovie.success === false ? false : true,
+        }),
+      )
       .catch(error => this.setState({ error }));
   }
 
@@ -40,7 +46,7 @@ export default class MovieDetailsPage extends Component {
   };
 
   render() {
-    const { movie } = this.state;
+    const { movie, success } = this.state;
     const { state } = this.props.location;
     const { error } = this.state;
     let poster;
@@ -58,12 +64,14 @@ export default class MovieDetailsPage extends Component {
         >
           Go back
         </button>
-        {error && (
+        {(error || !success) && (
           <Notification
-            message={`Whoops, something went wrong: ${error.message}`}
+            message={`Whoops, something went wrong: ${
+              (error && error.message) || 'not valid id'
+            }`}
           />
         )}
-        {movie && (
+        {movie && success && (
           <div className={styles.card}>
             <img
               src={poster}

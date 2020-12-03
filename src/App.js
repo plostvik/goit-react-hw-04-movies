@@ -26,7 +26,7 @@ export default class App extends Component {
               {routes.map((route, index) => {
                 return (
                   <Route
-                    kay={index}
+                    key={index}
                     path={route.path}
                     exact={route.exact}
                     component={route.component}
