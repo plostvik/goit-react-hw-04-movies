@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import moviesApi from '../../../../services/movieApi.js';
 import styles from './Cast.module.css';
 import Notification from '../../../../../components/Notification';
+import Loader from '../../../../Loader';
 
 export default class Cast extends Component {
   state = {
     cast: null,
     error: null,
+    loading: false,
   };
 
   componentDidMount() {
     const id = this.props.match.params.movieId;
+    this.setState({ loading: true });
     moviesApi
       .getMovieCredits(id)
       .then(data => this.setState({ cast: data.cast }))
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ error }))
+      .finally(() => this.setState({ loading: false }));
   }
 
   componentWillUnmount() {
@@ -22,9 +26,10 @@ export default class Cast extends Component {
   }
 
   render() {
-    const { cast, error } = this.state;
+    const { cast, error, loading } = this.state;
     return (
       <>
+        {loading && <Loader />}
         {error && (
           <Notification
             message={`Whoops, something went wrong: ${error.message}`}

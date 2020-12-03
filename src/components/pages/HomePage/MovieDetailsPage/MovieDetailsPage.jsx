@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import moviesApi from '../../../services/movieApi.js';
 import routes from '../../../../router.js';
 import Cast from './Cast';
 import Reviews from './Reviews';
 import styles from './MovieDetailsPage.module.css';
 import Notification from '../../../Notification';
+import Loader from '../../../Loader';
 
 export default class MovieDetailsPage extends Component {
   state = {
     movie: null,
     error: null,
     success: true,
+    loading: false,
   };
 
   static propTypes = {};
 
   componentDidMount() {
+    this.setState({ loading: true });
     moviesApi
       .getMovieDetails(this.props.match.params.movieId)
       .then(fetchedMovie =>
@@ -26,7 +28,8 @@ export default class MovieDetailsPage extends Component {
           success: fetchedMovie.success === false ? false : true,
         }),
       )
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ error }))
+      .finally(() => this.setState({ loading: false }));
   }
 
   componentWillUnmount() {
@@ -46,7 +49,7 @@ export default class MovieDetailsPage extends Component {
   };
 
   render() {
-    const { movie, success } = this.state;
+    const { movie, success, loading } = this.state;
     const { state } = this.props.location;
     const { error } = this.state;
     let poster;
@@ -64,6 +67,7 @@ export default class MovieDetailsPage extends Component {
         >
           Go back
         </button>
+        {loading && <Loader />}
         {(error || !success) && (
           <Notification
             message={`Whoops, something went wrong: ${

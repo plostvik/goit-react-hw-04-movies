@@ -4,21 +4,25 @@ import moviesApi from '../../services/movieApi.js';
 import queryString from 'query-string';
 import styles from './MoviesPage.module.css';
 import Notification from '../../Notification';
+import Loader from '../../Loader';
 
 export default class MoviesPage extends Component {
   state = {
     movies: [],
     inputValue: '',
     error: null,
+    loading: false,
   };
 
   componentDidMount() {
     const { query } = queryString.parse(this.props.location.search);
     if (query) {
+      this.setState({ loading: true });
       moviesApi
         .searchMovies(query)
         .then(data => this.setState({ movies: data.results }))
-        .catch(error => this.setState({ error }));
+        .catch(error => this.setState({ error }))
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -31,10 +35,12 @@ export default class MoviesPage extends Component {
     );
 
     if (prevQueryParams !== newQueryParams) {
+      this.setState({ loading: true });
       moviesApi
         .searchMovies(newQueryParams)
         .then(data => this.setState({ movies: data.results }))
-        .catch(error => this.setState({ error }));
+        .catch(error => this.setState({ error }))
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -54,7 +60,7 @@ export default class MoviesPage extends Component {
   };
 
   render() {
-    const { movies, inputValue, error } = this.state;
+    const { movies, inputValue, error, loading } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit} className={styles.form}>
@@ -71,6 +77,7 @@ export default class MoviesPage extends Component {
           </button>
         </form>
         <ul>
+          {loading && <Loader />}
           {error && (
             <Notification
               message={`Whoops, something went wrong: ${error.message}`}
