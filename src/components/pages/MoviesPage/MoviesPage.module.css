@@ -1,0 +1,22 @@
+.search {
+  width: 300px;
+  height: 45px;
+  padding: 0 20px;
+  font-size: 1rem;
+  border: 1px solid #d0cfce;
+  outline: none;
+}
+
+.form {
+  display: flex;
+  position: absolute;
+  top: 12px;
+  right: 28%;
+}
+
+.searchBtn {
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #d0cfce;
+  margin-left: 10px;
+}

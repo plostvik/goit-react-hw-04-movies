@@ -1,0 +1,54 @@
+.btn {
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #d0cfce;
+  margin-bottom: 10px;
+}
+
+.card {
+  display: flex;
+}
+
+.poster {
+  width: 25%;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.desc {
+  width: 500px;
+  margin-left: 20px;
+}
+
+.additionalInfo {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.rating {
+  margin-bottom: 10px;
+}
+
+.overview {
+  margin-bottom: 10px;
+}
+
+.genre {
+  margin-bottom: 10px;
+}
+
+.info {
+  margin-bottom: 10px;
+}
+
+.addListItem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.additionalLink {
+  color: black;
+}
